@@ -98,7 +98,7 @@ class UploadStoryActivity : AppCompatActivity() {
             val requestBody = desc.toRequestBody("text/plain".toMediaType())
             val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
             val multiPartBody = MultipartBody.Part.createFormData(
-                "photo  ",
+                "photo",
                 imageFile.name,
                 requestImageFile
             )

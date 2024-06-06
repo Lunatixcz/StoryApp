@@ -1,8 +1,5 @@
 package com.dicoding.storyapp.view.signup
 
-import android.net.http.HttpException
-import android.os.Build
-import androidx.annotation.RequiresExtension
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,6 +8,7 @@ import com.dicoding.storyapp.data.repository.AuthRepository
 import com.dicoding.storyapp.data.response.ErrorResponse
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
 class SignupViewModel (private val userRepository: AuthRepository) : ViewModel() {
 
@@ -27,7 +25,6 @@ class SignupViewModel (private val userRepository: AuthRepository) : ViewModel()
         data class Error(val message: String): RegistrationStatus()
     }
 
-    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     fun register(name: String, email: String, password: String) {
         _isLoading.value = true
         viewModelScope.launch {
@@ -39,7 +36,7 @@ class SignupViewModel (private val userRepository: AuthRepository) : ViewModel()
                 } else {
                     _registrationStatus.value = RegistrationStatus.Error(response.message ?: "Failed to Create User Account")
                 }
-            } catch (e: retrofit2.HttpException) {
+            } catch (e: HttpException) {
                 val jsonInString = e.response()?.errorBody()?.string()
                 val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
                 val errorMessage = errorBody.message

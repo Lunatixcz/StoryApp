@@ -45,8 +45,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         setupView()
-        showStory()
         observeStories()
+        showStory()
 
         binding.fabUpload.setOnClickListener {
             startActivity(Intent(this, UploadStoryActivity::class.java))
@@ -66,12 +66,6 @@ class MainActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    private fun showStory(){
-        binding.rvStory.layoutManager = LinearLayoutManager(this)
-        adapter = StoryAdapter()
-        binding.rvStory.adapter = adapter
     }
 
     private fun setupView() {
@@ -94,6 +88,12 @@ class MainActivity : AppCompatActivity() {
                 showDialog("Gagal mengambil cerita")
             }
         }
+    }
+
+    private fun showStory(){
+        binding.rvStory.layoutManager = LinearLayoutManager(this)
+        adapter = StoryAdapter()
+        binding.rvStory.adapter = adapter
     }
 
     private fun showLoading(isLoading : Boolean){

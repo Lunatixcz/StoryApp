@@ -12,18 +12,13 @@ class ApiConfig {
         private const val BASE_URL = BuildConfig.BASE_URL
 
         fun getApiService(token: String): ApiService {
-            val loggingInterceptor = if (BuildConfig.DEBUG) {
-                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-            } else {
-                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE)
-            }
-
+            val loggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
             val authInterceptor = Interceptor { chain ->
-                val request = chain.request()
-                    .newBuilder()
+                val req = chain.request()
+                val requestHeaders = req.newBuilder()
                     .addHeader("Authorization", "Bearer $token")
                     .build()
-                chain.proceed(request)
+                chain.proceed(requestHeaders)
             }
             val client = OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
