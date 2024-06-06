@@ -17,6 +17,7 @@ import com.dicoding.storyapp.adapter.StoryAdapter
 import com.dicoding.storyapp.factory.ViewModelFactory
 import com.dicoding.storyapp.view.welcome.WelcomeActivity
 import com.dicoding.storyapp.databinding.ActivityMainBinding
+import com.dicoding.storyapp.view.maps.MapsActivity
 import com.dicoding.storyapp.view.upload.UploadStoryActivity
 
 class MainActivity : AppCompatActivity() {
@@ -62,6 +63,10 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.logout -> {
                 viewModel.logout()
+                true
+            }
+            R.id.maps -> {
+                startActivity(Intent(this@MainActivity, MapsActivity::class.java))
                 true
             }
             else -> super.onOptionsItemSelected(item)

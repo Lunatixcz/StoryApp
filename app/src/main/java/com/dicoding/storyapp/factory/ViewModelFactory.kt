@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.dicoding.storyapp.data.repository.UserRepository
 import com.dicoding.storyapp.di.Injection
 import com.dicoding.storyapp.view.main.MainViewModel
+import com.dicoding.storyapp.view.maps.MapsViewModel
 import com.dicoding.storyapp.view.storydetail.DetailViewModel
 import com.dicoding.storyapp.view.upload.UploadStoryViewModel
 
@@ -22,6 +23,9 @@ class ViewModelFactory(private val repository: UserRepository) : ViewModelProvid
             }
             modelClass.isAssignableFrom(UploadStoryViewModel::class.java) -> {
                 UploadStoryViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(MapsViewModel::class.java) -> {
+                MapsViewModel(repository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

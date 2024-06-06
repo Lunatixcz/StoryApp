@@ -19,6 +19,10 @@ class UserRepository(
         return apiService.getStoryDetail(storyId)
     }
 
+    suspend fun getStoriesLocation(): StoryResponse{
+        return apiService.getStoriesLocation(location = 1)
+    }
+
     suspend fun logout() = userPreference.logout()
 
     companion object{
