@@ -3,6 +3,7 @@ package com.dicoding.storyapp.di
 import android.content.Context
 import com.dicoding.storyapp.data.repository.UserRepository
 import com.dicoding.storyapp.data.api.ApiConfig
+import com.dicoding.storyapp.data.database.StoryDatabase
 import com.dicoding.storyapp.data.pref.UserPreference
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -15,6 +16,8 @@ object Injection {
 
         val apiService = ApiConfig.getApiService(user.token)
 
-        return UserRepository(apiService,pref)
+        val storyDatabase =StoryDatabase.getDatabase(context)
+
+        return UserRepository(apiService,pref, storyDatabase)
     }
 }

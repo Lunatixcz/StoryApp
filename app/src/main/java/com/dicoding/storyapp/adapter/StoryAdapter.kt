@@ -6,6 +6,8 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.paging.PagingData
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +16,7 @@ import com.dicoding.storyapp.data.response.ListStoryItem
 import com.dicoding.storyapp.databinding.ItemStoryCardBinding
 import com.dicoding.storyapp.view.storydetail.DetailActivity
 
-class StoryAdapter : ListAdapter<ListStoryItem, StoryAdapter.StoryViewHolder>(StoryDiffCallback()) {
+class StoryAdapter : PagingDataAdapter<ListStoryItem, StoryAdapter.StoryViewHolder>(StoryDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StoryViewHolder {
         val binding = ItemStoryCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -24,10 +26,14 @@ class StoryAdapter : ListAdapter<ListStoryItem, StoryAdapter.StoryViewHolder>(St
     override fun onBindViewHolder(holder: StoryViewHolder, position: Int) {
         val story = getItem(position)
 
-        holder.bind(story)
+        if (story != null) {
+            holder.bind(story)
+        }
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context, DetailActivity::class.java)
-            intent.putExtra("id", story.id)
+            if (story != null) {
+                intent.putExtra("id", story.id)
+            }
 
             val imagePair = android.util.Pair.create(holder.binding.ivStoryImage as View, "image")
             val titlePair = android.util.Pair.create(holder.binding.tvStoryTitle as View, "title")

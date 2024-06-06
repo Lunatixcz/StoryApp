@@ -40,8 +40,6 @@ class MainActivity : AppCompatActivity() {
             if (!user.isLogin) {
                 startActivity(Intent(this, WelcomeActivity::class.java))
                 finish()
-            } else {
-                viewModel.getStories()
             }
         }
 
@@ -86,12 +84,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeStories(){
-        viewModel.stories.observe(this) {storyResponse ->
-            if (!storyResponse.error!!) {
-                adapter.submitList(storyResponse.listStory)
-            } else {
-                showDialog("Gagal mengambil cerita")
-            }
+        viewModel.story.observe(this) {pagingData ->
+            adapter.submitData(lifecycle, pagingData)
         }
     }
 
