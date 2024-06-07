@@ -16,7 +16,7 @@ import com.dicoding.storyapp.data.response.ListStoryItem
 import com.dicoding.storyapp.databinding.ItemStoryCardBinding
 import com.dicoding.storyapp.view.storydetail.DetailActivity
 
-class StoryAdapter : PagingDataAdapter<ListStoryItem, StoryAdapter.StoryViewHolder>(StoryDiffCallback()) {
+class StoryAdapter : PagingDataAdapter<ListStoryItem, StoryAdapter.StoryViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StoryViewHolder {
         val binding = ItemStoryCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -71,4 +71,15 @@ class StoryAdapter : PagingDataAdapter<ListStoryItem, StoryAdapter.StoryViewHold
         }
     }
 
+    companion object {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListStoryItem>() {
+            override fun areItemsTheSame(oldItem: ListStoryItem, newItem: ListStoryItem): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: ListStoryItem, newItem: ListStoryItem): Boolean {
+                return oldItem == newItem
+            }
+        }
+    }
 }
