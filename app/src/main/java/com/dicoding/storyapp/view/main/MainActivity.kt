@@ -11,8 +11,10 @@ import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.storyapp.R
+import com.dicoding.storyapp.adapter.LoadingStateAdapter
 import com.dicoding.storyapp.adapter.StoryAdapter
 import com.dicoding.storyapp.factory.ViewModelFactory
 import com.dicoding.storyapp.view.welcome.WelcomeActivity
@@ -44,12 +46,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         setupView()
-        observeStories()
         showStory()
 
         binding.fabUpload.setOnClickListener {
             startActivity(Intent(this, UploadStoryActivity::class.java))
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!adapter.snapshot().isEmpty()) adapter.refresh()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -92,7 +98,23 @@ class MainActivity : AppCompatActivity() {
     private fun showStory(){
         binding.rvStory.layoutManager = LinearLayoutManager(this)
         adapter = StoryAdapter()
-        binding.rvStory.adapter = adapter
+        binding.rvStory.adapter = adapter.withLoadStateFooter(
+            footer = LoadingStateAdapter {
+                adapter.retry()
+            }
+        )
+
+        viewModel.story.observe(this) {pagingData ->
+            adapter.submitData(lifecycle, pagingData)
+        }
+
+        adapter.addLoadStateListener { loadState ->
+            if (loadState.refresh is LoadState.Loading) {
+                showLoading(true)
+            } else {
+                showLoading(false)
+            }
+        }
     }
 
     private fun showLoading(isLoading : Boolean){
